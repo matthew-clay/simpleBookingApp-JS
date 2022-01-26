@@ -17,31 +17,100 @@
 	<link href="#" rel="shortcut icon" type="image/x-icon">
 </head>
 <body>
-<div class="container">
-	<header>
-		<h2>Simple Booking App.</h2>
-		<!--add	App details and guide here.-->
-		<!--<div></div>-->
-	</header>
-	<!--book menu-->
-	<div class="bookMenuContainer">
-		<div class="text-center">
-			<label for="customerName">Customer Name:</label>
-			<input class="form-control customerInput" id="customerName" placeholder="Enter customer name..."
+<!--app header-->
+<header class="text-center mt-3">
+	<h1>Simple Booking App.</h1>
+	<p>A simple booking app which user can create/edit & delete their book in a specific
+		date/time.
+	</p>
+</header>
+<main>
+	<!--userInfo container-->
+	<div class="container d-flex flex-column align-items-center py-3 customerInfoContainer">
+		<!--customerName-->
+		<div class="form-floating mb-3">
+			<input class="form-control customerInput" id="customerName" placeholder="Enter your name..." type="text">
+			<label class="lbl" for="customerName">Customer Name</label>
+		</div>
+		<!--serviceType-->
+		<div class="form-floating mb-3">
+			<input class="form-control customerInput" id="serviceName" placeholder="Enter service type..."
 			       type="text">
+			<label class="lbl" for="serviceName">Service Type</label>
 		</div>
-
-		<div>
-			<label for="customerEmail">Customer Email:</label>
-			<input class="form-control customerInput" id="customerEmail" placeholder="Enter your email..."
-			       type="email">
+		<!--bookDate-->
+		<div class="form-floating mb-3">
+			<input class="form-control customerInput" id="bookDate"
+			       type="date">
+			<label class="lbl" for="bookDate">Date</label>
 		</div>
-
-		<div>
-			<label for="bookedDate">Booked Date:</label>
-			<input class="form-control customerInput" id="bookedDate" type="datetime-local">
+		<!--bookTime-->
+		<div class="form-floating">
+			<input class="form-control customerInput" id="bookTime"
+			       type="time">
+			<label class="lbl" for="bookTime">Time</label>
+		</div>
+		<!--submitBtn-->
+		<div class="mt-3">
+			<button class="btn btn-primary" id="btnSubmit" type="button">Submit</button>
 		</div>
 	</div>
-</div>
+
+	<div class="bookInfoContainer mt-3 container d-flex">
+		<div class="card p-3 m-2">
+			<div class="text-center bookID">Book ID - 1</div>
+			<div>Name - Matthew</div>
+			<div>Service Type - HairCut</div>
+			<div>BookDate - 27/01/2022</div>
+			<div>Time - 10:22 AM</div>
+			<div class="btnContainer mt-4">
+				<button class="btn btn-info">Edit Book</button>
+				<button class="btn btn-danger">Delete Book</button>
+			</div>
+		</div>
+
+		<div class="card p-3 m-2">
+			<div class="text-center bookID">Book ID - 2</div>
+			<div>Name - Clay</div>
+			<div>Service Type - Dentist</div>
+			<div>BookDate - 28/01/2022</div>
+			<div>Time - 04:30 PM</div>
+			<div class="btnContainer mt-4">
+				<button class="btn btn-info">Edit Book</button>
+				<button class="btn btn-danger">Delete Book</button>
+			</div>
+		</div>
+
+		<div class="card p-3 m-2">
+			<div class="text-center bookID">Book ID - 3</div>
+			<div>Name - Edward</div>
+			<div>Service Type - Dinner</div>
+			<div>BookDate - 28/01/2022</div>
+			<div>Time - 06:45 PM</div>
+			<div class="btnContainer mt-4">
+				<button class="btn btn-info">Edit Book</button>
+				<button class="btn btn-danger">Delete Book</button>
+			</div>
+		</div>
+
+		<div class="card p-3 m-2">
+			<div class="text-center bookID">Book ID - 4</div>
+			<div>Name - Charlie</div>
+			<div>Service Type - Client Meeting</div>
+			<div>BookDate - 28/01/2022</div>
+			<div>Time - 07:00 AM</div>
+			<div class="btnContainer mt-4">
+				<button class="btn btn-info">Edit Book</button>
+				<button class="btn btn-danger">Delete Book</button>
+			</div>
+		</div>
+	</div>
+</main>
+<footer>
+	<div></div>
+</footer>
+
+<!--app.js-->
+<script src="app.js"></script>
 </body>
 </html>

@@ -1,34 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
 }
 
 body {
-    width: 100vw;
-    height: 100vh;
-    background-color: #011627;
-    color: #fdfffc;
+    background-color: #353535;
+    color: #D9D9D9;
+    font-family: 'Padauk', sans-serif;
 }
 
-header {
-    padding: 25px 0;
-    text-align: center;
-}
-
-.bookMenuContainer {
-    width: 700px;
-    height: 450px;
-    background-color: #FDFFFC;
-    padding: 25px;
-    border-radius: 10px;
-    color: #000;
-    margin: 0 auto;
+.customerInfoContainer {
+    width: 40%;
+    background-color: #D9D9D9;
+    border-radius: 5px;
 }
 
 .customerInput {
     width: 350px;
-    outline: none;
-    display: inline-block;
-    border: 1px solid #2e2e2e;
-    margin: 5px 15px;
+}
+
+.lbl {
+    color: #ff6700;
+}
+
+#btnSubmit:hover {
+    background-color: #2b2d42;
+}
+
+.card {
+    width: 300px;
+    background-color: #3C6E71;
+    color: #FFFFFF;
+}
+
+.bookID {
+    color: #ff9f1c;
 }
