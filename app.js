@@ -11,22 +11,23 @@ const customerBookInfo = [];
 let bookInfoObj = {};
 let counter = 1;
 
-const saveCustomerBook = () => {
+const saveBookingInfo = () => {
   const customerName = customerNameTag.value,
     serviceName = serviceNameTag.value,
     bookDate = bookDateTag.value,
     bookDateTime = bookDateTimeTag.value;
 
+  // condition for inputTags != empty strings
   if (
     customerName === "" ||
     serviceName === "" ||
     bookDate === "" ||
     bookDateTime === ""
   ) {
-    alert("Input Fields Required...");
-    return;
+    return alert("Input Fields Required...");
   }
 
+  // assign to created Object{} and push them to created Array[]
   bookInfoObj = {
     name: customerName,
     serviceType: serviceName,
@@ -34,6 +35,7 @@ const saveCustomerBook = () => {
     dateTime: bookDateTime,
     id: counter,
   };
+
   customerBookInfo.push(bookInfoObj);
   const key = `Booking ${counter}`;
   const value = JSON.stringify(customerBookInfo);
@@ -41,39 +43,42 @@ const saveCustomerBook = () => {
   counter += 1;
 
   const bookedInfoFromLocalStorage = localStorage.getItem(key);
-  const bookedCustomerObj = JSON.parse(bookedInfoFromLocalStorage);
+  const bookedCustomerArray = JSON.parse(bookedInfoFromLocalStorage);
 
-  bookInfoContainerTag.innerHTML = "";
-  createShowBookedInfo(bookedCustomerObj);
+  bookInfoContainerTag.innerHTML = ""; // to make sure no duplicate Books.
+  createBookingCard(bookedCustomerArray, clearPreviousInfo); // array as a parameter
 };
 
+btnSubmitTag.addEventListener("click", saveBookingInfo);
+
+// reload on clear & click => submitBtn on clear
 const clearPreviousInfo = () => {
   for (let i = 0; i < inputTags.length; i++) {
     inputTags[i].value = "";
   }
 };
 
-const createShowBookedInfo = (bookedCustomerObj) => {
-  for (let i = 0; i < bookedCustomerObj.length; i++) {
+const createBookingCard = (bookingInfoArray, callback) => {
+  for (let i = 0; i < bookingInfoArray.length; i++) {
     const cardTag = document.createElement("div");
     cardTag.classList.add("card", "p-3", "m-2");
 
     const bookTag = document.createElement("div");
     bookTag.classList.add("text-center", "bookID");
-    const idForBooking = bookedCustomerObj[i].id;
+    const idForBooking = bookingInfoArray[i].id;
     bookTag.id = idForBooking;
     bookTag.innerHTML = `Book ID - ${idForBooking}`;
 
     const showNameTag = document.createElement("div");
-    showNameTag.append(`Name - ${bookedCustomerObj[i].name}`);
+    showNameTag.append(`Name - ${bookingInfoArray[i].name}`);
 
     const showServiceTypeTag = document.createElement("div");
     showServiceTypeTag.append(
-      `Service Type - ${bookedCustomerObj[i].serviceType}`
+      `Service Type - ${bookingInfoArray[i].serviceType}`
     );
 
-    const date = bookedCustomerObj[i].date;
-    const dateTime = bookedCustomerObj[i].dateTime;
+    const date = bookingInfoArray[i].date;
+    const dateTime = bookingInfoArray[i].dateTime;
 
     const showDateInfoTag = document.createElement("div");
     showDateInfoTag.append(`Book Date - ${date}`);
@@ -99,6 +104,7 @@ const createShowBookedInfo = (bookedCustomerObj) => {
     cancelBtnTag.append("Cancel Book");
 
     editAndCancelBookContainerTag.append(editBtnTag, cancelBtnTag);
+
     cardTag.append(
       bookTag,
       showNameTag,
@@ -109,45 +115,71 @@ const createShowBookedInfo = (bookedCustomerObj) => {
     );
     bookInfoContainerTag.append(cardTag);
 
-    const btnEditTag = document.querySelector(".btnEdit");
-    const btnCancelTag = document.querySelector(".btnCancel");
-
-    btnEditTag.addEventListener("click", () => {
+    editBtnTag.addEventListener("click", () => {
       isAllowedToEditOrCancel(bookedDate, editAndCancelBookContainerTag);
     });
 
-    btnCancelTag.addEventListener("click", () => {
-      isAllowedToEditOrCancel(bookedDate, editAndCancelBookContainerTag);
+    cancelBtnTag.addEventListener("click", () => {
+      isAllowedToEditOrCancel(bookedDate, cardTag);
     });
   }
-  clearPreviousInfo();
+  callback();
 };
 
-const isAllowedToEditOrCancel = (date, btnContainer) => {
+const isAllowedToEditOrCancel = (date, param) => {
   const currentDate = new Date();
   const newCurrentDateTime = currentDate.setHours(currentDate.getHours() + 24);
+  const bookingDate = date.getTime();
 
-  if (date.getTime() > newCurrentDateTime) {
-    const answer = prompt(
-      "Type Yes or No to make sure for canceling the Booking"
-    ).toLowerCase();
-    if (answer === null) {
-    } else if (answer === "yes") {
-      alert("You've successfully canceled the Booking.");
+  if (bookingDate > newCurrentDateTime) {
+    if (param.classList[0] === "card") {
+      const answer = prompt(
+        "Enter Yes to cancel your Booking or No to undo Operation."
+      ).toLowerCase();
+
+      if (answer === null) {
+        return answer;
+      } else if (answer === "yes") {
+        counter = 1;
+        const key = `Booking ${counter}`;
+        localStorage.removeItem(key);
+        counter += 1;
+        param.remove();
+        return alert("You've successfully canceled the Booking.");
+      } else {
+        return console.log(answer);
+      }
     } else {
-      console.log(answer);
+      return alert("You can edit the booking");
     }
-  } else if (date.getTime() < newCurrentDateTime) {
-    btnContainer.firstChild.disabled = true;
-    btnContainer.lastChild.disabled = true;
-    return alert(
-      "Due to your Booked-Time is closer than tommorow date/time, you cannot be able to Edit or Cancel the Booking."
-    );
-  } else return console.log(error);
-};
+    // end of condition
+  } else if (bookingDate < newCurrentDateTime) {
+    const editBtnTag = param.firstChild;
+    const cancelBtnTag = param.lastChild;
 
-btnSubmitTag.addEventListener("click", saveCustomerBook);
+    if (param.classList[0] === "btnContainer") {
+      editBtnTag.disabled = true;
+      cancelBtnTag.disabled = true;
+
+      return alert("Sorry,You cannot be able to Edit the Booking.");
+    } else {
+      alert(
+        "Due to your Booked-Time is closer than tommorow date/time, you cannot be able to Edit or Cancel the Booking."
+      );
+    }
+  }
+};
 
 window.addEventListener("load", () => {
   clearPreviousInfo();
+  let bookedArray = [];
+  if (localStorage.length >= 0) {
+    for (let i = 1; i <= localStorage.length; i++) {
+      const key = `Booking ${i}`;
+      const valueFromLocalStorage = localStorage.getItem(key);
+      bookedArray = JSON.parse(valueFromLocalStorage);
+    }
+    bookInfoContainerTag.innerHTML = ""; // to make sure no duplicate Books.
+    createBookingCard(bookedArray, clearPreviousInfo);
+  }
 });
