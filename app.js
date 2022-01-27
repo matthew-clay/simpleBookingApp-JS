@@ -140,10 +140,8 @@ const isAllowedToEditOrCancel = (date, param) => {
       if (answer === null) {
         return answer;
       } else if (answer === "yes") {
-        counter = 1;
-        const key = `Booking ${counter}`;
-        localStorage.removeItem(key);
-        counter += 1;
+        // const key = `Booking ${counter}`;
+        // localStorage.removeItem(key);
         param.remove();
         return alert("You've successfully canceled the Booking.");
       } else {
