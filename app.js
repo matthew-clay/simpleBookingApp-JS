@@ -7,12 +7,6 @@ const inputTags = document.querySelectorAll(".customerInput"),
 	btnSubmitTag = document.querySelector("#btnSubmit"),
 	bookInfoContainerTag = document.querySelector('.bookInfoContainer');
 
-const clearPreviousInfo = () => {
-	for (let i = 0; i < inputTags.length; i++) {
-		inputTags[i].value = "";
-	}
-}
-
 const customerBookInfo = [];
 let bookInfoObj = {};
 let counter = 1;
@@ -36,18 +30,24 @@ const saveCustomerBook = () => {
 	};
 	customerBookInfo.push(bookInfoObj);
 	
-	
+	/*
 	const key = `Booking ${counter}`;
 	const value = JSON.stringify(bookInfoObj);
 	localStorage.setItem(key, value);
+	*/
 	counter += 1;
 	
 	bookInfoContainerTag.innerHTML = "";
 	createShowBookedInfo(customerBookInfo);
 }
 
+const clearPreviousInfo = () => {
+	for (let i = 0; i < inputTags.length; i++) {
+		inputTags[i].value = "";
+	}
+}
+
 const createShowBookedInfo = (createShowBookedInfo) => {
-	
 	for (let i = 0; i < createShowBookedInfo.length; i++) {
 		const cardTag = document.createElement('div')
 		cardTag.classList.add('card', 'p-3', 'm-2');
@@ -70,26 +70,43 @@ const createShowBookedInfo = (createShowBookedInfo) => {
 		const showTimeInfoTag = document.createElement('div')
 		showTimeInfoTag.append(`Time - ${customerBookInfo[i].dateTime}`);
 		
-		const editAndDeleteBookContainerTag = document.createElement('div')
-		editAndDeleteBookContainerTag.classList.add('btnContainer', 'mt-4')
+		const editAndCancelBookContainerTag = document.createElement('div')
+		editAndCancelBookContainerTag.classList.add('btnContainer', 'mt-4')
 		const editBtnTag = document.createElement('button')
-		editBtnTag.classList.add('btn', 'btn-info')
+		editBtnTag.classList.add('btn', 'btn-info', 'btnEdit')
 		editBtnTag.append('Edit Book');
 		
-		const deleteBtnTag = document.createElement('button')
-		deleteBtnTag.classList.add('btn', 'btn-danger', 'ms-2')
-		deleteBtnTag.append('Delete Book');
+		const cancelBtnTag = document.createElement('button')
+		cancelBtnTag.classList.add('btn', 'btn-danger', 'btnCancel', 'ms-2')
+		cancelBtnTag.append('Cancel Book');
 		
-		editAndDeleteBookContainerTag.append(editBtnTag, deleteBtnTag);
-		cardTag.append(bookTag, showNameTag, showServiceTypeTag, showDateInfoTag, showTimeInfoTag, editAndDeleteBookContainerTag);
+		editAndCancelBookContainerTag.append(editBtnTag, cancelBtnTag);
+		cardTag.append(bookTag, showNameTag, showServiceTypeTag, showDateInfoTag, showTimeInfoTag, editAndCancelBookContainerTag);
 		bookInfoContainerTag.append(cardTag);
-		console.log(customerBookInfo)
 	}
 	clearPreviousInfo();
 }
 
+const isAllowedToEditOrCancel = (date) => {
+	const currentDate = new Date();
+	console.log("todayDate:", todayDate);
+	const newCurrentDate = currentDate.setHours(currentDate.getHours() + 24);
+	console.log("todayDate After + 24:", newCurrentDate);
+}
 
 btnSubmitTag.addEventListener('click', saveCustomerBook);
+
+const btnEditTag = document.querySelector('.btnEdit')
+const btnCancelTag = document.querySelector('.btnCancel')
+
+btnEditTag.addEventListener('click', () => {
+	isAllowedToEditOrCancel();
+});
+
+btnCancelTag.addEventListener('click', () => {
+	isAllowedToEditOrCancel();
+})
+
 
 window.addEventListener("load", () => {
 	clearPreviousInfo();
