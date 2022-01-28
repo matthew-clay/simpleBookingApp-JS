@@ -63,8 +63,8 @@ const createBookingCard = (bookingInfoArray, callback) => {
   // create cards
   bookingInfoArray.forEach((bookingInfo) => {
     const bookingCardTag = `
-    <div class="card p-3 m-2">
-      <div class="text-center bookID" id="1">Book ID - ${bookingInfo.id}</div>
+    <div class="card p-3 m-2" id="${bookingInfo.id}">
+      <div class="text-center bookID">Book ID - ${bookingInfo.id}</div>
       <div>Name - ${bookingInfo.name}</div>
       <div>Service Type - ${bookingInfo.serviceType}</div>
       <div>Book Date - ${bookingInfo.date}</div>
@@ -111,9 +111,10 @@ const isAllowedToEditOrCancel = (btn, date, htmlTag) => {
   const currentDate = new Date();
   const newCurrentDateTime = currentDate.setHours(currentDate.getHours() + 24);
   const bookingDate = date.getTime();
+  const cancelBtnTag = btn.classList.contains("btnCancel");
+  const editBtnTag = btn.classList.contains("btnEdit");
 
   if (bookingDate > newCurrentDateTime) {
-    const cancelBtnTag = btn.classList.contains("btnCancel");
     if (cancelBtnTag) {
       const answer = prompt(
         "Enter Yes to cancel your Booking or No to undo Operation."
@@ -127,15 +128,20 @@ const isAllowedToEditOrCancel = (btn, date, htmlTag) => {
 
       // beginning condition of prompt yOrN
       if (checkAns === "yes") {
+        const bookingId = htmlTag.id;
+        const key = `Booking ${bookingId}`;
         htmlTag.remove();
+        localStorage.removeItem(key);
         return alert("You've successfully canceled the Booking.");
       } else {
         return alert("Thank you!");
       }
       // end of condition
+    } else {
+      return alert("You can edit the booking");
     }
   } else if (bookingDate < newCurrentDateTime) {
-    const editBtnTag = btn.classList.contains("btnEdit");
+    console.log(editBtnTag);
     if (editBtnTag) {
       return alert("Sorry,You cannot be able to Edit the Booking.");
     } else {
